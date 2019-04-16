@@ -1,9 +1,19 @@
 from flask import Flask
 from flask_restful import reqparse, abort, Resource, Api
+from subprocess import Popen, PIPE
 
-
+class Ping(Resource):
+	def get(self,ip):		
+		process = Popen(['ping',ip,'-n','2'], shell=True, stdout=PIPE, stderr=PIPE)
+		#print (process.stdout.read())
+		out = proccess.stdou.read()
+		#print("exit code: {}".format(rc))	
+		#print("error: {}".format(process.stderr.read()))
+		return out
+		
 class TodoList(Resource):
-    def get(self):
+
+	def get(self):
         print("debug: sending fill list")
         return TODOS
 
@@ -35,7 +45,8 @@ class Todo(Resource):
 # Creates a dictionary with content ..
 TODOS = {
         'todo1':{'task':'build an API'},
-        'todo2':{'task':'?????'},
+        'todo2':{'task':'rest a bit'},
+        'todo3':{'task':'do some workout'}
         }
 
 app = Flask(__name__)
@@ -48,6 +59,8 @@ parser.add_argument('task')
 # Adding handlers to an App
 api.add_resource(TodoList,'/todos')
 api.add_resource(Todo,'/todos/<todo_id>')
+api.add_resource(Ping,'/ping/<ip>')
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
