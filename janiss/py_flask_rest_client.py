@@ -1,4 +1,4 @@
-from requests import put,get
+from requests import put,get,post
 
 ret = get('http://localhost:5000/todos')
 print("GET({}): ".format(ret.status_code,ret.json()))
